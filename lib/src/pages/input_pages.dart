@@ -9,6 +9,15 @@ class _InputPageState extends State<InputPage> {
   String _nombre = "";
   String _email = "";
   String _fecha = "";
+  String _opSelec = "Volar";
+
+  List<String> _poderes = [
+    'Volar',
+    'Rayos laser',
+    'Super aliento',
+    'Super fuerza'
+  ];
+
   TextEditingController _campoFecha = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -55,8 +64,35 @@ class _InputPageState extends State<InputPage> {
     );
   }
 
+  List<DropdownMenuItem<String>> getOpciones() {
+    List<DropdownMenuItem<String>> lista = [];
+
+    _poderes.forEach((poder) {
+      lista.add(DropdownMenuItem(
+        child: Text(poder),
+        value: poder,
+      ));
+    });
+    return lista;
+  }
+
   Widget _crearDropdown() {
-    return DropdownButton<String>(items: [], onChanged: (opt) {});
+    return Row(
+      children: <Widget>[
+        Icon(Icons.select_all),
+        SizedBox(width: 30.0),
+        Expanded(
+          child: DropdownButton<String>(
+              value: _opSelec,
+              items: getOpciones(),
+              onChanged: (opt) {
+                setState(() {
+                  _opSelec = opt!;
+                });
+              }),
+        )
+      ],
+    );
   }
 
   Widget _crearEmail() {
@@ -130,6 +166,7 @@ class _InputPageState extends State<InputPage> {
     return ListTile(
       title: Text("Nombre es $_nombre"),
       subtitle: Text("El e-mail es $_email"),
+      trailing: Text(_opSelec),
     );
   }
 }
